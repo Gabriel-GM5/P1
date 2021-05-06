@@ -1,5 +1,6 @@
 import remi.gui as gui
 from remi import start, App
+import Pyro4
 
 class MyApp(App):
     def __init__(self, *args):
@@ -27,4 +28,3 @@ class MyApp(App):
 
 # starts the web server
 start(MyApp)
-#Teste
