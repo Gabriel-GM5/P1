@@ -1,30 +1,36 @@
-import remi.gui as gui
-from remi import start, App
-import Pyro4
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot
 
-class MyApp(App):
-    def __init__(self, *args):
-        super(MyApp, self).__init__(*args)
+class App(QWidget):
 
-    def main(self):
-        container = gui.VBox(width=120, height=100)
-        self.lbl = gui.Label('Hello world!')
-        self.bt = gui.Button('Press me!')
+    # Criando uma Janela
+    def __init__(self):
+        super().__init__()
+        self.title = 'Cliente P1'
+        self.left = 100
+        self.top = 100
+        self.width = 640
+        self.height = 480
+        self.initUI()
+        
+    def initUI(self):
+        # Janela
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
 
-        # setting the listener for the onclick event of the button
-        self.bt.onclick.do(self.on_button_pressed)
+        #Interface
+        self.createGridLayout()
+        windowLayout = QVBoxLayout()
+        windowLayout.addWidget(self.horizontalGroupBox)
+        self.setLayout(windowLayout)
+        
 
-        # appending a widget to another, the first argument is a string key
-        container.append(self.lbl)
-        container.append(self.bt)
-
-        # returning the root widget
-        return container
-
-    # listener function
-    def on_button_pressed(self, widget):
-        self.lbl.set_text('Button pressed!')
-        self.bt.set_text('Hi!')
-
-# starts the web server
-start(MyApp)
+        #Renderizar
+        self.show()
+    
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = App()
+    sys.exit(app.exec_())
