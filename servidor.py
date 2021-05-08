@@ -1,16 +1,6 @@
-import Pyro4, ZODB, ZODB.FileStorage, transaction
+import Pyro4, ZODB, ZODB.FileStorage, transaction, persistent
 
-# Configuração do ODB
-storage = ZODB.FileStorage.FileStorage('data/mydata.fs')
-db = ZODB.DB(storage)
-connection = db.open()
-root = connection.root
-
-if not hasattr(root, 'perfis'):
-    root.perfis = []
-    transaction.commit()
-
-class Perfil:
+class Perfil(persistent.Persistent):
     def __init__(self, email, nome, sobrenome):
         self.email = email
         self.nome = nome
@@ -37,23 +27,31 @@ class Perfil:
 # Procedimentos
 @Pyro4.expose
 class CrudDePerfis(object):
-    def get_fortune(self, name):
-        return "Hello, {0}. Here is your fortune message:\n" \
-               "Tomorrow's lucky number is 12345678.".format(name)
-    def soma_numeros(self, a, b):
-        return a+b
     def novoPerfil(self, email, nome, sobrenome):
-        root.perfis.append(Perfil(email, nome, sobrenome))
-        transaction.commit()
+        root['perfis'].append(Perfil(email, nome, sobrenome))
         return "Inserido com Sucesso!"
+
     def listarPerfis(self):
-        print(root.perfis)
         ans = ''
-        for i in root.perfis:
+        for i in root['perfis']:        
             ans += 'Nome: ' + i.getNome() + '\nSobrenome: ' + i.getSobrenome() + '\nE-mail: ' + i.getEmail() + '\n'
         return ans
+        
+    def salvar(self, pss):
+        transaction.commit()
+        return pss
 
 def main():
+    # Configuração do ODB
+    storage = ZODB.FileStorage.FileStorage('data/mydata.fs')
+    db = ZODB.DB(storage)
+    conn=db.open()
+    root = conn.root()
+
+    
+    # Reseta ou cria novo storage
+    # root['perfis'] = []
+
     # Configuração da Conexão
     daemon = Pyro4.Daemon()
     ns = Pyro4.locateNS()
