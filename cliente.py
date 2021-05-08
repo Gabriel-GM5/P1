@@ -6,8 +6,11 @@ def main():
 
     # Lista de operações
     while True:
-        print('1 - Soma')
+        print('1 - Adicionar Perfil')
         opt = int(input('Opção desejada: '))
         if opt == 1:
-            print(crud_de_perfis.soma_numeros(7, 7))
+            nome = input('E-mail: ')
+            nome = input('Nome: ')
+            sobrenome = input('Sobrenome: ')
+            print(crud_de_perfis.novoPerfil(email, nome, sobrenome))
             

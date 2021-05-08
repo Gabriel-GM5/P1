@@ -1,10 +1,34 @@
-import Pyro4, ZODB, ZODB.FileStorage
+import Pyro4, ZODB, ZODB.FileStorage, transaction
 
 # Configuração do ODB
 storage = ZODB.FileStorage.FileStorage('data/mydata.fs')
 db = ZODB.DB(storage)
 connection = db.open()
 root = connection.root
+
+class Perfil:
+    def __init__(self, email, nome, sobrenome):
+        self.email = email
+        self.nome = nome
+        self.sobrenome = sobrenome
+
+    def setEmail(self, email):
+        self.email = email
+
+    def getEmail(self):
+        return self.email
+
+    def setNome(self, nome):
+        self.nome = nome
+
+    def getNome(self):
+        return self.nome
+
+    def setSobrenome(self, sobrenome):
+        self.sobrenome = sobrenome
+
+    def getSobrenome(self):
+        return self.sobrenome
 
 # Procedimentos
 @Pyro4.expose
