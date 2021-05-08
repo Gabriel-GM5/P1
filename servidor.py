@@ -1,5 +1,16 @@
 import Pyro4, ZODB, ZODB.FileStorage, transaction, persistent
 
+# Configuração do ODB
+storage = ZODB.FileStorage.FileStorage('data/mydata.fs')
+db = ZODB.DB(storage)
+conn=db.open()
+root = conn.root()
+
+# Reseta ou cria novo storage
+# root['perfis'] = []
+
+sair = True
+
 class Perfil(persistent.Persistent):
     def __init__(self, email, nome, sobrenome):
         self.email = email
@@ -29,6 +40,7 @@ class Perfil(persistent.Persistent):
 class CrudDePerfis(object):
     def novoPerfil(self, email, nome, sobrenome):
         root['perfis'].append(Perfil(email, nome, sobrenome))
+        transaction.commit()
         return "Inserido com Sucesso!"
 
     def listarPerfis(self):
@@ -36,22 +48,8 @@ class CrudDePerfis(object):
         for i in root['perfis']:        
             ans += 'Nome: ' + i.getNome() + '\nSobrenome: ' + i.getSobrenome() + '\nE-mail: ' + i.getEmail() + '\n'
         return ans
-        
-    def salvar(self, pss):
-        transaction.commit()
-        return pss
 
 def main():
-    # Configuração do ODB
-    storage = ZODB.FileStorage.FileStorage('data/mydata.fs')
-    db = ZODB.DB(storage)
-    conn=db.open()
-    root = conn.root()
-
-    
-    # Reseta ou cria novo storage
-    # root['perfis'] = []
-
     # Configuração da Conexão
     daemon = Pyro4.Daemon()
     ns = Pyro4.locateNS()
@@ -61,6 +59,7 @@ def main():
     # Inicia a recepção de requisições
     print("Recebendo")
     daemon.requestLoop()
+    print('ok!')
 
 if __name__ == "__main__":
     main()

@@ -15,8 +15,6 @@ def main():
             print(crud_de_perfis.novoPerfil(email, nome, sobrenome))
         if opt == 2:
             print(crud_de_perfis.listarPerfis())
-        if opt == 10:
-            print(crud_de_perfis.salvar('Salvo!'))
 
 if __name__ == "__main__":
     main()
