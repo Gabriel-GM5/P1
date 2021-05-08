@@ -5,6 +5,8 @@ class GreetingMaker(object):
     def get_fortune(self, name):
         return "Hello, {0}. Here is your fortune message:\n" \
                "Tomorrow's lucky number is 12345678.".format(name)
+    def soma_numeros(self, a, b):
+        return a+b
 
 daemon = Pyro4.Daemon()                # make a Pyro daemon
 ns = Pyro4.locateNS()                  # find the name server
