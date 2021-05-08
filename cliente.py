@@ -11,3 +11,4 @@ while True:
     opt = int(input('Opção desejada: '))
     if opt == 1:
         print(greeting_maker.soma_numeros(7, 7))
+        
