@@ -1,25 +1,3 @@
-
-import Pyro4
-
-@Pyro4.expose
-
-class Saludo:
-    def saludar(self):
-        return "Hello"
-
-
-daemon=Pyro4.Daemon()
-
-uri=daemon.register(Saludo)
-ns=Pyro4.locateNS()
-ns.register('obj',uri)
-
-print(uri)
-
-daemon.requestLoop()
-# saved as greeting-server.py
-
-'''
 import Pyro4
 
 @Pyro4.expose
@@ -35,4 +13,3 @@ ns.register("example.greeting", uri)   # register the object with a name in the 
 
 print("Ready.")
 daemon.requestLoop()                   # start the event loop of the server to wait for calls
-'''
