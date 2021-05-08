@@ -6,6 +6,10 @@ db = ZODB.DB(storage)
 connection = db.open()
 root = connection.root
 
+if not hasattr(root, 'perfis'):
+    root.perfis = []
+    transaction.commit()
+
 class Perfil:
     def __init__(self, email, nome, sobrenome):
         self.email = email
@@ -38,6 +42,16 @@ class CrudDePerfis(object):
                "Tomorrow's lucky number is 12345678.".format(name)
     def soma_numeros(self, a, b):
         return a+b
+    def novoPerfil(self, email, nome, sobrenome):
+        root.perfis.append(Perfil(email, nome, sobrenome))
+        transaction.commit()
+        return "Inserido com Sucesso!"
+    def listarPerfis(self):
+        print(root.perfis)
+        ans = ''
+        for i in root.perfis:
+            ans += 'Nome: ' + i.getNome() + '\nSobrenome: ' + i.getSobrenome() + '\nE-mail: ' + i.getEmail() + '\n'
+        return ans
 
 def main():
     # Configuração da Conexão
